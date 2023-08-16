@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\bsStoreApp.Entities\bsStoreApp.Entities.csproj" />
+    <ProjectReference Include="..\bsStoreApp.Repositories\bsStoreApp.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nlog.Extensions.Logging" Version="5.3.3" />
+  </ItemGroup>
+
+</Project>
