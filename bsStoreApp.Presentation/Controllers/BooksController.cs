@@ -2,11 +2,6 @@
 using bsStoreApp.Services.Contract;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bsStoreApp.Presentation.Controllers
 {
@@ -25,107 +20,58 @@ namespace bsStoreApp.Presentation.Controllers
         [HttpGet]
         public IActionResult GetAllBooks()
         {
-            try
-            {
-                var books = _manager.BookServices.GetAllBooks(false);
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var books = _manager.BookServices.GetAllBooks(false);
+            return Ok(books);
         }
 
 
         [HttpGet("{id:int}")]
         public IActionResult GetOneBook([FromRoute(Name = "id")] int id)
         {
-            try
-            {
-                var book = _manager.BookServices.GetOneBookById(id, false);
+            var book = _manager.BookServices.GetOneBookById(id, false);
 
-                if (book is null)
-                    return NotFound();// 404
-
-                return Ok(book);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return Ok(book);
         }
 
         [HttpPost]
         public IActionResult CreateOneBook([FromBody] Book book)
         {
-            try
-            {
-                if (book is null)
-                    return BadRequest(); //400
+            if (book is null)
+                return BadRequest(); //400
 
-                _manager.BookServices.CreateOneBook(book);
+            _manager.BookServices.CreateOneBook(book);
 
-                return StatusCode(201, book);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return StatusCode(201, book);
         }
 
         [HttpPut("{id:int}")]
         public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] Book book)
         {
-            try
-            {
-                if (book is null)
-                    return BadRequest(); //400
+            if (book is null)
+                return BadRequest(); //400
 
-                _manager.BookServices.UpdateOneBook(id, book, true);
+            _manager.BookServices.UpdateOneBook(id, book, true);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public IActionResult DeleteOneBook([FromRoute(Name = "id")] int id)
         {
-            try
-            {
-                _manager.BookServices.DeleteOneBook(id, true);
+            _manager.BookServices.DeleteOneBook(id, true);
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return NoContent();
         }
 
         [HttpPatch("{id:int}")]
         public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<Book> bookPatch)
         {
-            try
-            {
-                var entity = _manager.BookServices.GetOneBookById(id, true);
+            var entity = _manager.BookServices.GetOneBookById(id, true);
 
-                if (entity is null)
-                    return NotFound();// 404
+            bookPatch.ApplyTo(entity);
+            _manager.BookServices.UpdateOneBook(id, entity, true);
 
-
-                bookPatch.ApplyTo(entity);
-                _manager.BookServices.UpdateOneBook(id, entity, true);
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return NoContent();
         }
     }
 }
