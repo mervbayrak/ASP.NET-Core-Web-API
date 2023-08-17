@@ -1,3 +1,4 @@
+using bsStoreApp.Services.Contract;
 using bsStoreApp.WebApi.Extensions;
 using NLog;
 
@@ -10,7 +11,6 @@ builder.Services.AddControllers()
     .AddNewtonsoftJson();
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,11 +21,18 @@ builder.Services.ConfigureLoggerService();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var logger = app.Services.GetRequiredService<ILoggerService>();
+app.ConfigureExceptionHandler(logger);
+ 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+if (app.Environment.IsProduction())
+{
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
