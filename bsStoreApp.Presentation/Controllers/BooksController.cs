@@ -1,4 +1,5 @@
-﻿using bsStoreApp.Entities.Models;
+﻿using bsStoreApp.Entities.DataTransferObjects;
+using bsStoreApp.Entities.Models;
 using bsStoreApp.Services.Contract;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,7 @@ namespace bsStoreApp.Presentation.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] Book book)
+        public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] BookDtoForUpdate book)
         {
             if (book is null)
                 return BadRequest(); //400
@@ -69,7 +70,7 @@ namespace bsStoreApp.Presentation.Controllers
             var entity = _manager.BookServices.GetOneBookById(id, true);
 
             bookPatch.ApplyTo(entity);
-            _manager.BookServices.UpdateOneBook(id, entity, true);
+            _manager.BookServices.UpdateOneBook(id, new BookDtoForUpdate(entity.Id, entity.Title, entity.Price), true);
 
             return NoContent();
         }
