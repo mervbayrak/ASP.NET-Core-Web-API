@@ -35,12 +35,12 @@ namespace bsStoreApp.Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateOneBook([FromBody] Book book)
+        public IActionResult CreateOneBook([FromBody] BookDtoForInsertion bookDto)
         {
-            if (book is null)
+            if (bookDto is null)
                 return BadRequest(); //400
 
-            _manager.BookServices.CreateOneBook(book);
+            var book = _manager.BookServices.CreateOneBook(bookDto);
 
             return StatusCode(201, book);
         }
@@ -65,12 +65,20 @@ namespace bsStoreApp.Presentation.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<Book> bookPatch)
+        public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDto> bookPatch)
         {
-            var entity = _manager.BookServices.GetOneBookById(id, true);
+            var bookDto = _manager.BookServices.GetOneBookById(id, true);
 
-            bookPatch.ApplyTo(entity);
-            _manager.BookServices.UpdateOneBook(id, new BookDtoForUpdate(entity.Id, entity.Title, entity.Price), true);
+            bookPatch.ApplyTo(bookDto);
+
+            _manager.BookServices.UpdateOneBook(id,
+                new BookDtoForUpdate()
+                {
+                    Id = bookDto.Id,
+                    Price = bookDto.Price,
+                    Title = bookDto.Title
+                },
+                true);
 
             return NoContent();
         }

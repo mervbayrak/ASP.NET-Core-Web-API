@@ -11,8 +11,8 @@ namespace bsStoreApp.Services.Contract
     public interface IBookServices
     {
         IEnumerable<BookDto> GetAllBooks(bool trackChanges);
-        Book GetOneBookById(int id, bool trackhanges);
-        Book CreateOneBook(Book book);
+        BookDto GetOneBookById(int id, bool trackhanges);
+        BookDto CreateOneBook(BookDtoForInsertion book);
         void UpdateOneBook(int id, BookDtoForUpdate bookDto, bool trackChanges);
         void DeleteOneBook(int id, bool trackChanges);
     }
