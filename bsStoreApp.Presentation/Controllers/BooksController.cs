@@ -40,6 +40,9 @@ namespace bsStoreApp.Presentation.Controllers
             if (bookDto is null)
                 return BadRequest(); //400
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            
             var book = _manager.BookServices.CreateOneBook(bookDto);
 
             return StatusCode(201, book);
@@ -51,7 +54,10 @@ namespace bsStoreApp.Presentation.Controllers
             if (book is null)
                 return BadRequest(); //400
 
-            _manager.BookServices.UpdateOneBook(id, book, true);
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            _manager.BookServices.UpdateOneBook(id, book, false);
 
             return NoContent();
         }
@@ -65,20 +71,21 @@ namespace bsStoreApp.Presentation.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDto> bookPatch)
+        public IActionResult PartiallyUpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] JsonPatchDocument<BookDtoForUpdate> bookPatch)
         {
-            var bookDto = _manager.BookServices.GetOneBookById(id, true);
+            if (bookPatch is null)
+                return BadRequest();
 
-            bookPatch.ApplyTo(bookDto);
+            var result = _manager.BookServices.GetOneBookForPatch(id, false);
 
-            _manager.BookServices.UpdateOneBook(id,
-                new BookDtoForUpdate()
-                {
-                    Id = bookDto.Id,
-                    Price = bookDto.Price,
-                    Title = bookDto.Title
-                },
-                true);
+            bookPatch.ApplyTo(result.bookDtoForUpdate, ModelState);
+
+            TryValidateModel(result.bookDtoForUpdate);
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            _manager.BookServices.SaveChangesForPatch(result.bookDtoForUpdate, result.book);
 
             return NoContent();
         }
