@@ -28,7 +28,7 @@ namespace bsStoreApp.Services
             _manager.Book.CreateOneBook(entity);
             await _manager.SaveAsync();
 
-            return book;
+            return _mapper.Map<BookDto>(entity);
         }
 
         public async Task DeleteOneBookAsync(int id, bool trackChanges)
@@ -54,7 +54,24 @@ namespace bsStoreApp.Services
             if (book is null)
                 throw new BookNotFoundException(id);
 
-            return book;
+            return _mapper.Map<BookDto>(book);
+        }
+
+        public (BookDtoForUpdate bookDtoForUpdate, Book book) GetOneBookForPatch(int id, bool trackChanges)
+        {
+            var book = _manager.Book.GetOneBookById(id, trackChanges);
+            if (book is null)
+                throw new BookNotFoundException(id);
+
+            var bookDtoForUpdate = _mapper.Map<BookDtoForUpdate>(book);
+
+            return (bookDtoForUpdate, book);
+        }
+
+        public void SaveChangesForPatch(BookDtoForUpdate bookDtoForUpdate, Book book)
+        {
+            _mapper.Map(bookDtoForUpdate, book);
+            _manager.Save();
         }
 
         public async Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges)
@@ -80,9 +97,6 @@ namespace bsStoreApp.Services
             if (entity is null)
                 throw new BookNotFoundException(id);
 
-            //Mapping
-            //entity.Title = book.Title;
-            //entity.Price = book.Price;
             entity = _mapper.Map<Book>(bookDto);
 
             _manager.Book.Update(entity);
