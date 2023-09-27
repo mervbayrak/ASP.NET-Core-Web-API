@@ -1,5 +1,6 @@
 ﻿using bsStoreApp.Entities.DataTransferObjects;
 using bsStoreApp.Entities.Models;
+using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -34,29 +35,19 @@ namespace bsStoreApp.Presentation.Controllers
             return Ok(book);
         }
 
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneBookAsync([FromBody] BookDtoForInsertion bookDto)
         {
-            if (bookDto is null)
-                return BadRequest(); //400
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var book = await _manager.BookServices.CreateOneBookAsync(bookDto);
 
             return StatusCode(201, book);
         }
 
         [HttpPut("{id:int}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id, [FromBody] BookDtoForUpdate book)
         {
-            if (book is null)
-                return BadRequest(); //400
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             await _manager.BookServices.UpdateOneBookAsync(id, book, false);
 
             return NoContent();

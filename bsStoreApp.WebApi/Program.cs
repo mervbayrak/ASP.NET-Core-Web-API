@@ -1,3 +1,4 @@
+using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
 using bsStoreApp.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ builder.Services.AddControllers(config =>
     .AddXmlDataContractSerializerFormatters()
     .AddApplicationPart(typeof(bsStoreApp.Presentation.AssemblyReference).Assembly)
     .AddNewtonsoftJson();
+
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
