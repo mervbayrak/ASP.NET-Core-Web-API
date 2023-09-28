@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bsStoreApp.Presentation.Controllers
 {
+    [ServiceFilter(typeof(LogFilterAttribute))]
     [ApiController]
     [Route("api/books")]
     public class BooksController : ControllerBase
@@ -44,8 +45,8 @@ namespace bsStoreApp.Presentation.Controllers
             return StatusCode(201, book);
         }
 
-        [HttpPut("{id:int}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id, [FromBody] BookDtoForUpdate book)
         {
             await _manager.BookServices.UpdateOneBookAsync(id, book, false);

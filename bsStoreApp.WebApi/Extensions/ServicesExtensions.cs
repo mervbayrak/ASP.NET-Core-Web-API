@@ -1,4 +1,5 @@
-﻿using bsStoreApp.Repositories.Contracts;
+﻿using bsStoreApp.Presentation.ActionFilters;
+using bsStoreApp.Repositories.Contracts;
 using bsStoreApp.Repositories.EFCore;
 using bsStoreApp.Services;
 using bsStoreApp.Services.Contract;
@@ -20,6 +21,9 @@ namespace bsStoreApp.WebApi.Extensions
 
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddSingleton<ILoggerService, LoggerManager>();
+
+        public static void ConfigureActionFilters(this IServiceCollection services) =>
+            services.AddSingleton<LogFilterAttribute>();
 
     }
 }
