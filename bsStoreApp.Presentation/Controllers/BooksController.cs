@@ -5,6 +5,7 @@ using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace bsStoreApp.Presentation.Controllers
 {
@@ -24,8 +25,11 @@ namespace bsStoreApp.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBooksAsync([FromQuery]BookParameters bookParameters)
         {
-            var books = await _manager.BookServices.GetAllBooksAsync(bookParameters, false);
-            return Ok(books);
+            var pagedResult = await _manager.BookServices.GetAllBooksAsync(bookParameters, false);
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.books);
         }
 
 

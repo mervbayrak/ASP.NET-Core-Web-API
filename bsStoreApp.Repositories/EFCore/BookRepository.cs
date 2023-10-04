@@ -17,12 +17,15 @@ namespace bsStoreApp.Repositories.EFCore
 
         public void UpdateOneBook(Book book) => Update(book);
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync(BookParameters bookParameters,bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters,bool trackChanges)
+        {
+            var books = await FindAll(trackChanges)
             .OrderBy(b => b.Id)
-            .Skip((bookParameters.PageNumber-1) * bookParameters.PageSize)
-            .Take(bookParameters.PageSize)
             .ToListAsync();
+
+            return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
+        }
+            
 
         public async Task<Book> GetOneBookByIdAsync(int id, bool trackChanges) => 
             await FindByCondition(b => b.Id.Equals(id), trackChanges)
