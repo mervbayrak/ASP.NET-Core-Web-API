@@ -1,4 +1,5 @@
 ﻿using bsStoreApp.Entities.Models;
+using bsStoreApp.Entities.RequestFeatures;
 using bsStoreApp.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,11 @@ namespace bsStoreApp.Repositories.EFCore
 
         public void UpdateOneBook(Book book) => Update(book);
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync(bool trackChanges) =>
+        public async Task<IEnumerable<Book>> GetAllBooksAsync(BookParameters bookParameters,bool trackChanges) =>
             await FindAll(trackChanges)
             .OrderBy(b => b.Id)
+            .Skip((bookParameters.PageNumber-1) * bookParameters.PageSize)
+            .Take(bookParameters.PageSize)
             .ToListAsync();
 
         public async Task<Book> GetOneBookByIdAsync(int id, bool trackChanges) => 
