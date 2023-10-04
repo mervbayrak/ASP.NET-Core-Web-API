@@ -1,5 +1,6 @@
 ﻿using bsStoreApp.Entities.DataTransferObjects;
 using bsStoreApp.Entities.Models;
+using bsStoreApp.Entities.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace bsStoreApp.Services.Contract
 {
     public interface IBookServices
     {
-        Task<IEnumerable<BookDto>> GetAllBooksAsync(bool trackChanges);
+        Task<IEnumerable<BookDto>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges);
         Task<BookDto> GetOneBookByIdAsync(int id, bool trackhanges);
         Task<BookDto> CreateOneBookAsync(BookDtoForInsertion book);
         Task UpdateOneBookAsync(int id, BookDtoForUpdate bookDto, bool trackChanges);

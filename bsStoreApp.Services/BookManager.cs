@@ -2,6 +2,7 @@
 using bsStoreApp.Entities.DataTransferObjects;
 using bsStoreApp.Entities.Exceptions;
 using bsStoreApp.Entities.Models;
+using bsStoreApp.Entities.RequestFeatures;
 using bsStoreApp.Repositories.Contracts;
 using bsStoreApp.Services.Contract;
 
@@ -38,9 +39,9 @@ namespace bsStoreApp.Services
             await _manager.SaveAsync();
         }
 
-        public async Task<IEnumerable<BookDto>> GetAllBooksAsync(bool trackChanges)
+        public async Task<IEnumerable<BookDto>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
         {
-            var books = await _manager.Book.GetAllBooksAsync(trackChanges);
+            var books = await _manager.Book.GetAllBooksAsync(bookParameters, trackChanges);
             return _mapper.Map<IEnumerable<BookDto>>(books);
         }
 

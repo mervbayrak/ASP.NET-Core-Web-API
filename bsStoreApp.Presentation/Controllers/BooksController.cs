@@ -1,5 +1,6 @@
 ﻿using bsStoreApp.Entities.DataTransferObjects;
 using bsStoreApp.Entities.Models;
+using bsStoreApp.Entities.RequestFeatures;
 using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
 using Microsoft.AspNetCore.JsonPatch;
@@ -21,9 +22,9 @@ namespace bsStoreApp.Presentation.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBooksAsync()
+        public async Task<IActionResult> GetAllBooksAsync([FromQuery]BookParameters bookParameters)
         {
-            var books = await _manager.BookServices.GetAllBooksAsync(false);
+            var books = await _manager.BookServices.GetAllBooksAsync(bookParameters, false);
             return Ok(books);
         }
 
