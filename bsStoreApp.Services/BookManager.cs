@@ -41,6 +41,9 @@ namespace bsStoreApp.Services
 
         public async Task<(IEnumerable<BookDto> books, MetaData metaData)> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
         {
+            if (!bookParameters.ValidPriceRange)
+                throw new PriceOutofRangeBadRequestException();
+            
             var booksWithMetaData = await _manager.Book.GetAllBooksAsync(bookParameters, trackChanges);
 
 
