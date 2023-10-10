@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bsStoreApp.Repositories.EFCore
 {
-    public class BookRepository : RepositoryBase<Book>, IBookRepository
+    public sealed class BookRepository : RepositoryBase<Book>, IBookRepository
     {
         public BookRepository(RepositoryContext context) : base(context)
         {
@@ -17,11 +17,12 @@ namespace bsStoreApp.Repositories.EFCore
 
         public void UpdateOneBook(Book book) => Update(book);
 
-        public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters,bool trackChanges)
+        public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
         {
             var books = await FindAll(trackChanges)
-            .OrderBy(b => b.Id)
-            .ToListAsync();
+                .FilterBooks(bookParameters.MinPrice, bookParameters.MaxPrice)
+                .OrderBy(b => b.Id)
+                .ToListAsync();
 
             return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
         }
