@@ -23,7 +23,7 @@ namespace bsStoreApp.Repositories.EFCore
             var books = await FindAll(trackChanges)
                 .FilterBooks(bookParameters.MinPrice, bookParameters.MaxPrice)
                 .Search(bookParameters.SearchTerm)
-                .OrderBy(b => b.Id)
+                .Sort(bookParameters.OrderBy)
                 .ToListAsync();
 
             return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
