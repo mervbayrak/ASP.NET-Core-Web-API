@@ -23,8 +23,11 @@ namespace bsStoreApp.WebApi.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddSingleton<ILoggerService, LoggerManager>();
 
-        public static void ConfigureActionFilters(this IServiceCollection services) =>
+        public static void ConfigureActionFilters(this IServiceCollection services)
+        {
+            services.AddSingleton<ValidationFilterAttribute>();
             services.AddSingleton<LogFilterAttribute>();
+        } 
 
         public static void ConfigureCors(this IServiceCollection services)
         {
