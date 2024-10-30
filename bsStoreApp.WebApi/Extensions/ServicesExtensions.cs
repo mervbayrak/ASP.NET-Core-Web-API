@@ -27,6 +27,7 @@ namespace bsStoreApp.WebApi.Extensions
         {
             services.AddSingleton<ValidationFilterAttribute>();
             services.AddSingleton<LogFilterAttribute>();
+            services.AddScoped<ValidateMediaTypeAttribute>();
         } 
 
         public static void ConfigureCors(this IServiceCollection services)

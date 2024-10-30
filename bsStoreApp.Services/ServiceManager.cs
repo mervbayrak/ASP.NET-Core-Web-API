@@ -15,7 +15,7 @@ namespace bsStoreApp.Services
         private readonly Lazy<IBookServices> _bookServices;
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerService logger, IMapper mapper, IDataShaper<BookDto> shaper)
         {
-            _bookServices = new Lazy<IBookServices>(()=> new BookManager(repositoryManager, logger, mapper, shaper));
+            _bookServices = new Lazy<IBookServices>(()=> new BookManager(repositoryManager, logger, mapper));
         }
         public IBookServices BookServices => _bookServices.Value;
     }
