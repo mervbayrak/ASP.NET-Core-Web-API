@@ -1,4 +1,5 @@
 using bsStoreApp.Presentation.ActionFilters;
+using bsStoreApp.Services;
 using bsStoreApp.Services.Contract;
 using bsStoreApp.WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureActionFilters();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureDataShaper();
+builder.Services.AddScoped<IBookLinks, BookLinks>();
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();
 
