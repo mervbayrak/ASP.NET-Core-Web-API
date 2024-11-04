@@ -56,6 +56,12 @@ namespace bsStoreApp.Services
             return (links, booksWithMetaData.MetaData);
         }
 
+        public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+        {
+            var bookList = await _manager.Book.GetAllBooksAsync(trackChanges);
+            return bookList;
+        }
+
         public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
         {
             var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
