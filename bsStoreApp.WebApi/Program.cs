@@ -45,6 +45,9 @@ builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();
 builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureHttpCacheHeader();
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureRateLimitingOption();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

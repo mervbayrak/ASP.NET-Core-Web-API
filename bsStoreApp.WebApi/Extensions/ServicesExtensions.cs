@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using bsStoreApp.Presentation.Controllers;
+using AspNetCoreRateLimit;
 
 namespace bsStoreApp.WebApi.Extensions
 {
@@ -110,5 +111,28 @@ namespace bsStoreApp.WebApi.Extensions
                 {
                     validateOpt.MustRevalidate = true;
                 });
+
+        public static void ConfigureRateLimitingOption(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>()
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit = 3,
+                    Period = "1m"
+                }
+            };
+
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules = rateLimitRules;
+            });
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        }
     } 
 }
