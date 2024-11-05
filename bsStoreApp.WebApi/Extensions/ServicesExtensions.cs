@@ -95,5 +95,20 @@ namespace bsStoreApp.WebApi.Extensions
                 opt.Conventions.Controller<BooksV2Controller>().HasDeprecatedApiVersion(new ApiVersion(2, 0));
             });
         }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services) =>
+            services.AddResponseCaching();
+
+        public static void ConfigureHttpCacheHeader(this IServiceCollection services) =>
+            services.AddHttpCacheHeaders(
+                expirationOpt =>
+                {
+                    expirationOpt.MaxAge = 70;
+                    expirationOpt.CacheLocation = Marvin.Cache.Headers.CacheLocation.Private;
+                },
+                validateOpt =>
+                {
+                    validateOpt.MustRevalidate = true;
+                });
     } 
 }

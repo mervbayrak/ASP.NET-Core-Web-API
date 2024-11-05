@@ -3,6 +3,7 @@ using bsStoreApp.Entities.Models;
 using bsStoreApp.Entities.RequestFeatures;
 using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -13,6 +14,8 @@ namespace bsStoreApp.Presentation.Controllers
     [ServiceFilter(typeof(LogFilterAttribute))]
     [ApiController]
     [Route("api/books")]
+    //[ResponseCache(CacheProfileName = "5mins")]
+    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)]
     public class BooksController : ControllerBase
     {
         private readonly IServiceManager _manager;
@@ -25,6 +28,7 @@ namespace bsStoreApp.Presentation.Controllers
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         [HttpHead]
         [HttpGet(Name = "GetAllBooksAsync")]
+        //[ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetAllBooksAsync([FromQuery]BookParameters bookParameters)
         {
             var linkParameters = new LinkParameters()
