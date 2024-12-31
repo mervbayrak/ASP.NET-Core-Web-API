@@ -6,8 +6,8 @@ namespace bsStoreApp.Presentation.Controllers
 {
 	//[ApiVersion("2.0", Deprecated = true)]
 	[ApiController]
-    [Route("api/booksV2")]
-
+    [Route("api/books")]
+    [ApiExplorerSettings(GroupName = "v2")]
     //[Route("api/v:{apiversion}/books")]
     public class BooksV2Controller :ControllerBase
 	{
