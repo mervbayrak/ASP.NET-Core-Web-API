@@ -1,9 +1,11 @@
-﻿using bsStoreApp.Entities.Models;
+﻿using System.Reflection;
+using bsStoreApp.Entities.Models;
 using bsStoreApp.Repositories.EFCore.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace bsStoreApp.Repositories.EFCore
 {
-    public class RepositoryContext : DbContext
+    public class RepositoryContext : IdentityDbContext<User>
     {
         public RepositoryContext(DbContextOptions options) : base(options)
         {
@@ -13,8 +15,10 @@ namespace bsStoreApp.Repositories.EFCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new BookConfig());
-
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.ApplyConfiguration(new BookConfig());
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

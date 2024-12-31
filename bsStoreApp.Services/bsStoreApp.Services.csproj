@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="automapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Nlog.Extensions.Logging" Version="5.3.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
   </ItemGroup>
 
 </Project>

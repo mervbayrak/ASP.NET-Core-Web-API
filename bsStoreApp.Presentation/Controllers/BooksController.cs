@@ -4,6 +4,7 @@ using bsStoreApp.Entities.RequestFeatures;
 using bsStoreApp.Presentation.ActionFilters;
 using bsStoreApp.Services.Contract;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -25,6 +26,7 @@ namespace bsStoreApp.Presentation.Controllers
             _manager = manager;
         }
 
+        [Authorize(Roles = "Editor")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         [HttpHead]
         [HttpGet(Name = "GetAllBooksAsync")]
