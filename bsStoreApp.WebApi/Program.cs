@@ -48,12 +48,14 @@ builder.Services.ConfigureHttpCacheHeader();
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureRateLimitingOption();
 builder.Services.AddHttpContextAccessor();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerService>();
 app.ConfigureExceptionHandler(logger);
- 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -71,6 +73,7 @@ app.UseCors("CorsPolicy");
 app.UseResponseCaching();
 app.UseHttpCacheHeaders();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
