@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
 
 namespace bsStoreApp.WebApi.Extensions
 {
@@ -39,7 +41,7 @@ namespace bsStoreApp.WebApi.Extensions
             services.AddSingleton<ValidationFilterAttribute>();
             services.AddSingleton<LogFilterAttribute>();
             services.AddScoped<ValidateMediaTypeAttribute>();
-        } 
+        }
 
         public static void ConfigureCors(this IServiceCollection services)
         {
@@ -186,8 +188,8 @@ namespace bsStoreApp.WebApi.Extensions
         {
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new OpenApiInfo { Title="Kitap Api", Version ="v1"});
-                s.SwaggerDoc("v2", new OpenApiInfo { Title="Kitap Api", Version ="v2"});
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitap Api", Version = "v1" });
+                s.SwaggerDoc("v2", new OpenApiInfo { Title = "Kitap Api", Version = "v2" });
 
                 s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
@@ -198,6 +200,16 @@ namespace bsStoreApp.WebApi.Extensions
                     Scheme = "Bearer"
                 });
 
+
+                // UserId başlığını da ekliyoruz
+                s.AddSecurityDefinition("UserId", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Description = "UserId başlığını her API isteği ile birlikte göndermeniz gerekmektedir.",
+                    Name = "UserId",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "UserId"
+                });
 
                 s.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
@@ -212,9 +224,23 @@ namespace bsStoreApp.WebApi.Extensions
                             Name ="Bearer"
                         },
                         new List<string>()
+                    },
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "UserId"
+                            }
+                        },
+                        new List<string>()
                     }
                 });
+
             });
         }
-    } 
+    }
+
+
 }
