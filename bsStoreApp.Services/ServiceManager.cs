@@ -15,26 +15,16 @@ namespace bsStoreApp.Services
 {
     public class ServiceManager : IServiceManager
     {
-        private readonly Lazy<IBookServices> _bookServices;
-        private readonly Lazy<IAuthenticationService> _authenticationService;
+        private readonly IBookServices _bookServices;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ServiceManager(
-            IRepositoryManager repositoryManager,
-            ILoggerService logger,
-            IMapper mapper,
-            IBookLinks bookLinks,
-            UserManager<User> userManager,
-            IConfiguration configuration
-            )
+        public ServiceManager(IBookServices bookServices, IAuthenticationService authenticationService)
         {
-
-            _bookServices = new Lazy<IBookServices>(() => new BookManager(repositoryManager, logger, mapper, bookLinks));
-
-            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationManager(logger, mapper, userManager, configuration));
+            _bookServices = bookServices;
+            _authenticationService = authenticationService;
         }
 
-
-        public IBookServices BookServices => _bookServices.Value;
-        public IAuthenticationService AuthenticationService => _authenticationService.Value;
+        public IBookServices BookServices => _bookServices;
+        public IAuthenticationService AuthenticationService => _authenticationService;
     }
 }

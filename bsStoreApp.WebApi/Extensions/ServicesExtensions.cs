@@ -240,6 +240,17 @@ namespace bsStoreApp.WebApi.Extensions
 
             });
         }
+
+        public static void RegisterRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IBookRepository, BookRepository>();
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBookServices, BookManager>();
+            services.AddScoped<IAuthenticationService, AuthenticationManager>();
+        }
     }
 
 
